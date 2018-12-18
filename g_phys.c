@@ -726,9 +726,9 @@ void SV_Physics_Toss (edict_t *ent)
 	isinwater = ent->watertype & MASK_WATER;
 
 	if (isinwater)
-		ent->waterlevel = 1;
-	else
 		ent->waterlevel = 0;
+	else
+		ent->waterlevel = 1;
 
 	if (!wasinwater && isinwater)
 		gi.positioned_sound (old_origin, g_edicts, CHAN_AUTO, gi.soundindex("misc/h2ohit1.wav"), 1, 1, 0);

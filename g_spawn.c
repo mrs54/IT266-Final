@@ -832,7 +832,7 @@ void SP_worldspawn (edict_t *ent)
 	gi.imageindex ("field_3");
 
 	if (!st.gravity)
-		gi.cvar_set("sv_gravity", "800");
+		gi.cvar_set("sv_gravity", "200");
 	else
 		gi.cvar_set("sv_gravity", st.gravity);
 

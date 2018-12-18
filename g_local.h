@@ -424,6 +424,10 @@ typedef struct
 	float		idle_time;
 	int			linkcount;
 
+	
+
+
+
 	int			power_armor_type;
 	int			power_armor_power;
 } monsterinfo_t;
@@ -863,15 +867,15 @@ struct gclient_s
 {
 
 	//AQC - Climbing
-	qboolean        hanging;
-	vec3_t          hang_point;
-	float           flip_time;
+	//qboolean        hanging;
+	//vec3_t          hang_point;
+	//float           flip_time;
 	//end AQC
-
+	
 	// known to server
 	player_state_t	ps;				// communicated by server to clients
 	int				ping;
-
+	
 	// private to game
 	client_persistant_t	pers;
 	client_respawn_t	resp;
@@ -962,6 +966,8 @@ struct edict_s
 	qboolean hanging; 
 	vec3_t hang_point; 
 	float flip_time;
+	
+
 
 	qboolean	inuse;
 	int			linkcount;
