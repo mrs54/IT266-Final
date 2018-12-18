@@ -1856,4 +1856,192 @@ void SP_misc_teleporter_dest (edict_t *ent)
 	VectorSet (ent->maxs, 32, 32, -16);
 	gi.linkentity (ent);
 }
+qboolean Grab_n_Climb(edict_t *ent) //AQC
+{
+	vec3_t  forward, start, end;
+	int     check = 0;
+	int     plusup = 0;
+	trace_t tr;
+
+	if (ent->deadflag || (ent->movetype == MOVETYPE_NOCLIP))
+		return false;
+
+	if (ent->groundentity)
+		return false;
+
+	AngleVectors(ent->s.angles, forward, NULL, NULL);
+	//forward[2] = 0;
+	VectorNormalize(forward);
+
+	VectorCopy(ent->s.origin, start);
+	// Space above?
+	start[2] += 56;
+	tr = gi.trace(ent->s.origin, NULL, NULL, start, ent, MASK_SHOT);
+	if (tr.fraction < 1.0)
+		return false;
+
+	VectorCopy(ent->s.origin, start);
+
+	while (check < 64)
+	{
+		start[2] += 1;
+		VectorMA(start, 40, forward, end); // Increased from 24
+		tr = gi.trace(start, NULL, NULL, end, ent, MASK_SOLID);
+		if (tr.fraction < 1.0)
+			check = 64;
+		else
+			check++;
+	}
+
+	if (tr.fraction < 1.0)
+	{
+		VectorCopy(ent->s.origin, start);
+		start[2] += 84;
+		VectorMA(start, 40, forward, end);  // Increased from 24
+		tr = gi.trace(start, NULL, NULL, end, ent, MASK_SOLID);
+
+		if (!(tr.fraction < 1.0))
+		{
+			VectorCopy(end, ent->client->hang_point);
+			check = (260 - plusup);
+			if (ent->velocity[2] < 0)
+				ent->velocity[2] = 0;
+			ent->velocity[2] += check;
+			if (ent->velocity[2] > 400)
+				ent->velocity[2] = 400;
+
+			//gi.dprintf ("Grab_n_Climb - pass");
+				return true;
+		}
+	}
+	//gi.dprintf ("Grab_n_Climb - fail");
+		return false;
+}
+
+qboolean HangingCheck(edict_t *ent)
+{
+	vec3_t  forward, start, end;
+	int     check = 0;
+	trace_t tr;
+
+	if (ent->groundentity)
+	{
+		ent->client->hanging = false;
+		return false;
+	}
+
+	AngleVectors(ent->s.angles, forward, NULL, NULL);
+	//forward[2] = 0;
+	VectorNormalize(forward);
+
+	VectorCopy(ent->s.origin, start);
+	// Space above?
+	start[2] += 56;
+	tr = gi.trace(ent->s.origin, NULL, NULL, start, ent, MASK_SHOT);
+	if (tr.fraction < 1.0)
+	{
+		ent->client->hanging = false;
+		return false;
+	}
+	VectorCopy(ent->s.origin, start);
+	start[2] -= 32;
+
+	while (check < 88)
+	{
+		start[2] += 1;
+		VectorMA(start, 40, forward, end); // Increased from 24
+		tr = gi.trace(start, NULL, NULL, end, ent, MASK_SOLID);
+		if (tr.fraction < 1.0)
+			check = 88;
+		else
+			check++;
+	}
+
+	if (tr.fraction < 1.0)
+	{
+		VectorCopy(ent->s.origin, start);
+		start[2] = ent->client->hang_point[2];
+		VectorMA(start, 40, forward, end);  // Increased from 24
+		tr = gi.trace(start, NULL, NULL, end, ent, MASK_SOLID);
+
+		if (!(tr.fraction < 1.0))
+		{
+			ent->client->hanging = true;
+			if (ent->velocity[2] > 400)
+				ent->velocity[2] = 400;
+			return true;
+		}
+	}
+	ent->client->hanging = false;
+	return false;
+}
+
+qboolean CheckHang(edict_t *ent)
+{
+	vec3_t  forward, start, end;
+	int     check;
+	trace_t tr;
+
+	//gi.dprintf ("CheckHang - ");
+	if (ent->groundentity)
+	{
+		//gi.dprintf ("on ground, fail");
+			return false;
+	}
+	AngleVectors(ent->s.angles, forward, NULL, NULL);
+	forward[2] = 0;
+	VectorNormalize(forward);
+
+	VectorCopy(ent->s.origin, start);
+
+	start[2] += 52;
+
+	// Space above?
+	tr = gi.trace(ent->s.origin, NULL, NULL, start, ent, MASK_SHOT);
+	if (tr.fraction < 1.0)
+	{
+		//gi.dprintf ("something above, fail");
+			return false;
+	}
+
+	check = 0;
+	while (check < 12)
+	{
+		VectorMA(start, 24, forward, end);
+		tr = gi.trace(start, NULL, NULL, end, ent, MASK_SHOT);
+		if (tr.fraction < 1.0)
+			check = 12;
+		else
+		{
+			start[2] += 1;
+			check++;
+		}
+	}
+
+	if (tr.fraction < 1.0)
+	{
+		//gi.dprintf ("fp pass, ");
+		check = 0;
+		while (check < 12)
+		{
+			VectorMA(start, 24, forward, end);
+			tr = gi.trace(start, NULL, NULL, end, ent, MASK_SHOT);
+
+			if (!(tr.fraction < 1.0))
+			{
+				ent->client->hanging = true;
+				VectorCopy(tr.endpos, ent->client->hang_point);
+				//gi.dprintf ("full pass");
+					return true;
+			}
+			else
+				check++;
+			start[2] += 1;
+		}
+	}
+
+	//gi.dprintf ("fail");
+		ent->client->hanging = false;
+	return false;
+} // AQC END
 

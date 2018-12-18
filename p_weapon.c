@@ -695,11 +695,11 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 	int		damage = 120;
 	float	radius;
 
-	radius = damage+40;
+	radius = damage+160;
 	if (is_quad)
 		damage *= 4;
 
-	VectorSet(offset, 8, 8, ent->viewheight-8);
+	VectorSet(offset, 20, 20, ent->viewheight-8);
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
 
@@ -839,8 +839,8 @@ void Weapon_Blaster_Fire (edict_t *ent)
 
 void Weapon_Blaster (edict_t *ent)
 {
-	static int	pause_frames[]	= {19, 32, 0};
-	static int	fire_frames[]	= {5, 0};
+	static int	pause_frames[]	= {0};
+	static int	fire_frames[]	= {1,2,3,4,5,0};
 
 	Weapon_Generic (ent, 4, 8, 52, 55, pause_frames, fire_frames, Weapon_Blaster_Fire);
 }

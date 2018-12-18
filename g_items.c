@@ -1496,6 +1496,27 @@ always owned, never in the world
 		0,
 /* precache */ "weapons/rg_hum.wav"
 	},
+	/*QUAKED weapon_flamethrower (.3 .3 1) (-16 -16 -16) (16 16 16)
+	*/
+	{
+		"weapon_flamethrower",
+		Pickup_Weapon,
+		Use_Weapon,
+		Drop_Weapon,
+		
+		"misc/w_pkup.wav",
+		"models/weapons/g_bfg/tris.md2", EF_ROTATE,
+		"models/weapons/v_bfg/tris.md2",
+		/* icon */		"w_bfg",
+		/* pickup */	"FlameThrower",
+		0,
+		1,
+		"Cells",
+		IT_WEAPON,
+		NULL,
+		0,
+		/* precache */ "sprites/fire.sp2"
+	},
 
 /*QUAKED weapon_bfg (.3 .3 1) (-16 -16 -16) (16 16 16)
 */

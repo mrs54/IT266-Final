@@ -1145,7 +1145,7 @@ void PutClientInServer (edict_t *ent)
 	ent->client = &game.clients[index];
 	ent->takedamage = DAMAGE_AIM;
 	ent->movetype = MOVETYPE_WALK;
-	ent->viewheight = 22;
+	ent->viewheight = 8;
 	ent->inuse = true;
 	ent->classname = "player";
 	ent->mass = 200;
@@ -1642,11 +1642,11 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 
 		if (ent->groundentity && !pm.groundentity && (pm.cmd.upmove >= 10) && (pm.waterlevel == 0))
 		{
-			gi.sound(ent, CHAN_VOICE, gi.soundindex("*jump1.wav"), 1, ATTN_NORM, 0);
+			gi.sound(ent, CHAN_VOICE, gi.soundindex(va("*spyro_jump.wav")), 1, ATTN_NORM, 0);
 			PlayerNoise(ent, ent->s.origin, PNOISE_SELF);
 		}
 
-		ent->viewheight = pm.viewheight;
+		ent->viewheight = 8;// pm.viewheight;
 		ent->waterlevel = pm.waterlevel;
 		ent->watertype = pm.watertype;
 		ent->groundentity = pm.groundentity;

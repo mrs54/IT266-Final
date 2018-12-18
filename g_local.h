@@ -861,6 +861,13 @@ typedef struct
 // except for 'client->pers'
 struct gclient_s
 {
+
+	//AQC - Climbing
+	qboolean        hanging;
+	vec3_t          hang_point;
+	float           flip_time;
+	//end AQC
+
 	// known to server
 	player_state_t	ps;				// communicated by server to clients
 	int				ping;
@@ -951,6 +958,10 @@ struct edict_s
 									// the server expects the first part
 									// of gclient_s to be a player_state_t
 									// but the rest of it is opaque
+
+	qboolean hanging; 
+	vec3_t hang_point; 
+	float flip_time;
 
 	qboolean	inuse;
 	int			linkcount;
