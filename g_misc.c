@@ -1857,7 +1857,7 @@ void SP_misc_teleporter_dest (edict_t *ent)
 	gi.linkentity (ent);
 }
 
-/*
+
 qboolean Grab_n_Climb(edict_t *ent) //AQC
 {
 	vec3_t  forward, start, end;
@@ -2046,4 +2046,4 @@ qboolean CheckHang(edict_t *ent)
 		ent->client->hanging = false;
 	return false;
 } // AQC END
-*/
+
